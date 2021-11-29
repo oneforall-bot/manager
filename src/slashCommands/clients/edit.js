@@ -65,7 +65,6 @@ module.exports = {
                 },
                 description: 'Edition of bot',
                 fields: Object.entries(clientData).map((row) => {
-                    console.log(typeof row[1], row[1])
                     return {
                         name: row[0],
                         value: typeof row[1] === 'object' && Object.prototype.toString.call(row[1]) !== '[object Date]' ? row[1].length < 1 ? 'N/A' : row[1].join(', ')  : row[1]?.toString() || 'N/A',
