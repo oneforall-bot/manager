@@ -11,12 +11,19 @@ module.exports = {
                 name: 'user',
                 description: 'The user to edit the bot',
                 required: true
+            },
+            {
+                type: 'STRING',
+                name: 'bot',
+                description: 'The bot to edit',
+                required: true
             }
         ]
     },
     run: async (ftSecurity, interaction) => {
         const {options} = interaction
         const member = options.getMember('user')
+        const bot = options.getString('bot')
         const selectMenuOptions = [
             {
                 label: 'Max guilds',
@@ -48,13 +55,13 @@ module.exports = {
         const row = new MessageActionRow().addComponents(
             new MessageSelectMenu().setPlaceholder('Configure the bot').setOptions(selectMenuOptions).setCustomId(`edit.${interaction.id}`)
         )
-        const clientData = await (await ftSecurity._fetch(`http://localhost:5006/api/client/${member.id}`, {
+        const TempclientData = await (await ftSecurity._fetch(`http://localhost:5006/api/client/${member.id}`, {
             headers: {
                 'Content-Type': 'application/json',
                 'Authorization': ftSecurity.config.apiKey
             }
         })).json()
-        delete clientData.updatedAt
+        const clientData = TempclientData.find(client => client.botId === bot)
         delete clientData.__dirname
         if (clientData.message === 'Client not found') return interaction.editReply({content: clientData.message})
         const embed = () => {
@@ -95,7 +102,7 @@ module.exports = {
                     clientData.expiredAt = moment().add(ms(clientData.expiredAt), 'millisecond').valueOf()
                     clientData.createdAt = new Date()
                     clientData.guildIds = [...clientData.guildIds]
-                    ftSecurity._fetch(`http://localhost:5006/api/client/${member.id}`,
+                    ftSecurity._fetch(`http://localhost:5006/api/client/${member.id}/${bot}`,
                         {
                             method: 'patch',
                             body: JSON.stringify(clientData),
@@ -104,7 +111,7 @@ module.exports = {
                                 'Authorization': ftSecurity.config.apiKey
                             }
                         }).then(() => {
-                        interaction.editReply({content: `Le bot pour ${member} a été modifie`})
+                        interaction.editReply({content: `Le bot ${bot} de ${member} a été modifie`})
                     })
                     break
                 case 'token':
