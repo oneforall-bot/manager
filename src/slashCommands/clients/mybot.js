@@ -34,6 +34,6 @@ module.exports = {
             timestamp: new Date(),
             description: !data.message ? description.join('\n') : 'No subscription'
         }
-        interaction.reply({embeds: [embed], ephemeral: true})
+        interaction.reply({embeds: [embed], ephemeral: false})
     }
 }

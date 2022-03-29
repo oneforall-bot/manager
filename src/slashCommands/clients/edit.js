@@ -41,11 +41,6 @@ module.exports = {
                 description: "Définir la date d'expiration",
             },
             {
-                label: 'Guilds authorized',
-                value: 'guildIds',
-                description: "Définir la date d'expiration",
-            },
-            {
                 label: 'Edit bot',
                 value: 'create',
                 description: "Edite le bot",

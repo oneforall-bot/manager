@@ -35,11 +35,6 @@ module.exports = {
                 description: "Définir la date d'expiration",
             },
             {
-                label: 'Guilds authorized',
-                value: 'guildIds',
-                description: "Définir la date d'expiration",
-            },
-            {
                 label: 'Create bot',
                 value: 'create',
                 description: "Créer le bot",
@@ -57,7 +52,6 @@ module.exports = {
             createdAt: '',
             expiredAt: '',
             owners: [member.id],
-            guildIds: [],
             licenseKey: new Key().gen()
         }
         const embed = () => {
@@ -97,7 +91,6 @@ module.exports = {
                 case 'create':
                     clientData.expiredAt = moment().add(ms(clientData.expiredAt), 'millisecond').valueOf()
                     clientData.createdAt = new Date()
-                    clientData.guildIds = [...clientData.guildIds]
                     ftSecurity._fetch(`http://localhost:5006/api/client/new`,
                         {
                             method: 'post',
